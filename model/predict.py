@@ -56,7 +56,19 @@ gradient_boosting_regression = joblib.load('/Users/cy_ariel/Desktop/data/gradien
 
 #test_pay_7_pay_45部分结果
 y_test_pay_7_pay_45 = gradient_boosting_regression.predict(test_pay_7_pay_45_tem)
+y_test_pay_7_pay_45 = pd.DataFrame(y_test_pay_7_pay_45,columns={'prediction_pay_price'})
+#将结果合并回去
+columns_test = test_pay_7_pay_45.columns
+test_pay_7_pay_45 = test_pay_7_pay_45.values
+test_pay_7_pay_45 = pd.DataFrame(test_pay_7_pay_45,columns=columns_test)
+test_pay_7_pay_45 = pd.concat([test_pay_7_pay_45,y_test_pay_7_pay_45],axis=1)
 
+sub_pay_7_pay_45 = test_pay_7_pay_45[['user_id','prediction_pay_price']]
+sub_pay_7_pay_45.to_csv('/Users/cy_ariel/Desktop/data/sub_pay_7_pay_45.csv')
 
-
-
+#合并三块结果
+sub1 = pd.read_csv('/Users/cy_ariel/Desktop/data/sub_test_nopay_7.csv')
+sub2 = pd.read_csv('/Users/cy_ariel/Desktop/data/sub_test_pay_7_nopay_45.csv')
+sub3 = pd.read_csv('/Users/cy_ariel/Desktop/data/sub_pay_7_pay_45.csv')
+sub = pd.concat([sub1,sub2,sub3],axis=0)
+sub.to_csv('/Users/cy_ariel/Desktop/data/sub_sample.csv')
